@@ -1,0 +1,85 @@
+{
+  "v": 1,
+  "areas": {
+    "pernas": {
+      "active": true,
+      "start": null,
+      "cycle": 0,
+      "intensity": "4",
+      "sessions": [
+        {
+          "d": "2026-11-13",
+          "c": 0,
+          "i": ""
+        }
+      ]
+    },
+    "coxas": {
+      "active": true,
+      "start": null,
+      "cycle": 0,
+      "intensity": "4",
+      "sessions": [
+        {
+          "d": "2026-11-13",
+          "c": 0,
+          "i": ""
+        }
+      ]
+    },
+    "bracos": {
+      "active": true,
+      "start": null,
+      "cycle": 0,
+      "intensity": "",
+      "sessions": []
+    },
+    "barriga": {
+      "active": true,
+      "start": null,
+      "cycle": 0,
+      "intensity": "",
+      "sessions": []
+    },
+    "axilas": {
+      "active": true,
+      "start": "2026-11-13",
+      "cycle": 0,
+      "intensity": "4",
+      "sessions": [
+        {
+          "d": "2026-11-13",
+          "c": 0,
+          "i": ""
+        }
+      ]
+    },
+    "virilha": {
+      "active": true,
+      "start": null,
+      "cycle": 0,
+      "intensity": "4",
+      "sessions": [
+        {
+          "d": "2026-11-13",
+          "c": 0,
+          "i": ""
+        }
+      ]
+    },
+    "buco": {
+      "active": true,
+      "start": null,
+      "cycle": 0,
+      "intensity": "",
+      "sessions": []
+    },
+    "queixo": {
+      "active": true,
+      "start": null,
+      "cycle": 0,
+      "intensity": "",
+      "sessions": []
+    }
+  }
+}

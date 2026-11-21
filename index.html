@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cronograma Lumea 8000</title>
+<meta name="theme-color" content="#b4527a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lumea">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf6f3; --card:#ffffff; --ink:#2b2226; --muted:#7a6c72; --line:#ece3df;
+  --accent:#b4527a; --accent-soft:#f6e3ec; --ok:#3f8f6b; --ok-soft:#e2f2ea;
+  --warn:#c27a1a; --warn-soft:#fbefdc; --bad:#c0392b; --bad-soft:#fae3e0;
+  --corpo:#b4527a; --rosto:#6a6fc4; --axilas:#2f9a8f; --biquini:#d0803a;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#1c1719; --card:#262022; --ink:#f3ecee; --muted:#b0a2a8; --line:#3a3135;
+  --accent:#e07aa5; --accent-soft:#40252f; --ok:#6cc79c; --ok-soft:#1f3a2e; --warn:#f0a94a; --warn-soft:#3d2e17;
+  --bad:#f07a6c; --bad-soft:#40211d; --corpo:#e07aa5; --rosto:#9aa0f0; --axilas:#5fcabf; --biquini:#f0a35e;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:22px 16px 60px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:30px;margin:0 0 2px;letter-spacing:-.01em}
+h2{font-family:Fraunces,Georgia,serif;font-weight:500;font-size:21px;margin:26px 0 10px}
+h3{margin:0;font-size:16px}
+.sub{color:var(--muted);margin:0 0 4px}
+.save{font-size:12px;color:var(--muted)}
+nav{display:flex;gap:6px;margin:18px 0 6px;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;font:inherit;font-weight:500;cursor:pointer}
+nav button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 12px;border-radius:10px;font:inherit;font-size:14px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sm{padding:4px 9px;font-size:13px}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+input[type=date],select{font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px}
+.att{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.s-hoje{background:var(--accent-soft);color:var(--accent)}
+.s-janela{background:var(--ok-soft);color:var(--ok)}
+.s-futuro{background:var(--line);color:var(--muted)}
+.s-atrasada{background:var(--warn-soft);color:var(--warn)}
+.s-perdida{background:var(--bad-soft);color:var(--bad)}
+.s-pendente{background:var(--accent-soft);color:var(--accent)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.between{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.prog{display:flex;gap:3px;margin:10px 0 6px}
+.prog i{flex:1;height:7px;border-radius:4px;background:var(--line)}
+.prog i.ini{background:color-mix(in srgb,var(--accent) 25%,var(--line))}
+.prog i.done{background:var(--accent)}
+.prog i.gap{flex:.25;background:transparent}
+.agenda-day{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.agenda-day:first-child{border-top:none}
+.datebox{width:58px;flex:none;text-align:center;border-radius:12px;padding:6px 0;background:var(--accent-soft);color:var(--accent)}
+.datebox b{display:block;font-family:Fraunces,serif;font-size:24px;line-height:1.1}
+.datebox span{font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.datebox.late{background:var(--warn-soft);color:var(--warn)}
+.datebox.lost{background:var(--bad-soft);color:var(--bad)}
+.datebox.fut{background:var(--line);color:var(--muted)}
+.item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 0;flex-wrap:wrap}
+.hist{margin:8px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted);max-height:120px;overflow:auto}
+.hist li{display:flex;justify-content:space-between;padding:2px 0}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .h{font-size:11px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+.cal .c{min-height:68px;border:1px solid var(--line);border-radius:10px;padding:4px 5px;background:var(--card);font-size:12px}
+.cal .c.out{opacity:.35}
+.cal .c.today{outline:2px solid var(--accent)}
+.cal .c .n{font-weight:600}
+.chip{display:flex;align-items:center;gap:4px;font-size:11px;line-height:1.25;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip.done{font-weight:600}
+.chip.proj .dot{background:transparent!important;border:1.5px solid currentColor}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:10px 0}
+.tip{border-left:3px solid var(--accent);padding:2px 0 2px 12px;margin:10px 0}
+.switch{position:relative;width:38px;height:22px;flex:none}
+.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;border-radius:999px;background:var(--line);cursor:pointer;transition:.2s}
+.switch span:before{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s}
+.switch input:checked+span{background:var(--accent)}
+.switch input:checked+span:before{transform:translateX(16px)}
+.card.off{opacity:.55}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:20}
+.modal.show{display:flex}
+.modal .card{max-width:420px;width:100%}
+textarea{width:100%;height:140px;font:12px/1.4 ui-monospace,monospace;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:8px}
+.hero{background:var(--accent);color:#fff;border-radius:var(--r);padding:18px 20px;margin-bottom:14px}
+.hero .k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.85}
+.hero .d{font-family:Fraunces,Georgia,serif;font-size:30px;line-height:1.15;margin:4px 0 6px}
+.hero .a{font-size:14px;opacity:.95}
+.hero.late{background:var(--warn)}
+.nextline{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);color:var(--ink)}
+.nextline b{color:var(--accent);font-size:16px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:14px;z-index:30;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:92vw;text-align:center}
+.empty{text-align:center;padding:26px 10px;color:var(--muted)}
+.alert{background:var(--bad-soft);color:var(--bad);border-radius:10px;padding:8px 10px;font-size:13px;margin-top:8px}
+.alert.w{background:var(--warn-soft);color:var(--warn)}
+.alert.ok{background:var(--ok-soft);color:var(--ok)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Meu cronograma Lumea 8000</h1>
+  <p class="sub">Philips Lumea IPL 8000 · BRI948/00 · corpo, rosto, axilas e biquíni</p>
+  <div class="save" id="saveState">Carregando…</div>
+
+  <nav id="tabs">
+    <button data-t="agenda" class="on">Agenda</button>
+    <button data-t="areas">Áreas</button>
+    <button data-t="cal">Calendário</button>
+    <button data-t="info">Como funciona</button>
+  </nav>
+
+  <section id="v-agenda"></section>
+  <section id="v-areas" hidden></section>
+  <section id="v-cal" hidden></section>
+  <section id="v-info" hidden></section>
+</div>
+
+<div class="modal" id="modal"><div class="card" id="modalBody"></div></div>
+
+<script>
+// ---------- dados fixos ----------
+const ATT = {
+  corpo:{name:'Acessório Corpo', color:'var(--corpo)'},
+  rosto:{name:'Acessório Rosto', color:'var(--rosto)'},
+  axilas:{name:'Acessório Axilas', color:'var(--axilas)'},
+  biquini:{name:'Acessório Biquíni', color:'var(--biquini)'}
+};
+const AREAS = [
+  {id:'pernas', name:'Pernas (canelas e panturrilhas)', att:'corpo'},
+  {id:'coxas', name:'Coxas', att:'corpo'},
+  {id:'bracos', name:'Braços', att:'corpo'},
+  {id:'barriga', name:'Barriga', att:'corpo'},
+  {id:'axilas', name:'Axilas', att:'axilas'},
+  {id:'virilha', name:'Virilha (área do biquíni)', att:'biquini'},
+  {id:'buco', name:'Buço', att:'rosto'},
+  {id:'queixo', name:'Queixo e mandíbula', att:'rosto'}
+];
+const INITIAL = 4, TOUCH = 8, TOL = 3;
+const MES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MESL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DOW = ['dom','seg','ter','qua','qui','sex','sáb'];
+
+// ---------- datas ----------
+const pad = n => String(n).padStart(2,'0');
+const iso = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); };
+const add = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+const diff = (a,b) => Math.round((parse(a)-parse(b))/864e5);
+const today = () => iso(new Date());
+const fmt = s => { const d = parse(s); return DOW[d.getDay()]+', '+d.getDate()+' '+MES[d.getMonth()]; };
+const fmtL = s => { const d = parse(s); return ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'][d.getDay()]+', '+d.getDate()+' de '+MESL[d.getMonth()].toLowerCase(); };
+const fmtY = s => { const d = parse(s); return d.getDate()+' '+MES[d.getMonth()]+' '+d.getFullYear(); };
+
+// ---------- estado ----------
+function blank(){
+  const a = {};
+  AREAS.forEach(x => a[x.id] = {active:true, start:null, cycle:0, intensity:'', sessions:[]});
+  return {v:1, areas:a};
+}
+let S = blank();
+let store = {kind:'local'};
+const LKEY = 'lumea8000-cronograma';
+
+function normalize(o){
+  const b = blank();
+  if(o && o.areas) for(const k in b.areas){ if(o.areas[k]) b.areas[k] = Object.assign(b.areas[k], o.areas[k]); }
+  return b;
+}
+function localLoad(){ try{ const t = localStorage.getItem(LKEY); return t ? JSON.parse(t) : null; }catch(e){ return null; } }
+function localSave(){ try{ localStorage.setItem(LKEY, JSON.stringify(S)); }catch(e){} }
+
+let writing = false, pending = false;
+async function save(){
+  localSave();
+  if(store.kind !== 'db'){ setSave(); return; }
+  if(writing){ pending = true; return; }
+  writing = true;
+  try{ await store.ref.set({json: JSON.stringify(S), at: Date.now()}); setSave(); }
+  catch(e){ document.getElementById('saveState').textContent = 'Não consegui salvar na conta agora — ficou salvo neste navegador.'; }
+  writing = false;
+  if(pending){ pending = false; save(); }
+}
+function setSave(){
+  document.getElementById('saveState').textContent = store.kind === 'db'
+    ? '✓ Salvo na sua conta — aparece igual em qualquer aparelho'
+    : 'Salvo neste aparelho (navegador)';
+}
+
+async function initStore(){
+  const loc = localLoad();
+  if(loc) S = normalize(loc);
+  else {
+    // primeira vez neste aparelho: carrega o histórico salvo no repositório
+    try{
+      const r = await fetch('dados.json', {cache:'no-store'});
+      if(r.ok){ S = normalize(await r.json()); localSave(); }
+    }catch(e){}
+  }
+  render();
+  try{
+    if(!window.claude || !claude.use){ setSave(); return; }
+    const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+    if(!db || !user){ setSave(); return; }
+    const id = await user.id();
+    if(!id){ setSave(); return; }
+    const ref = db.collection('data/users/'+id).doc('lumea');
+    const snap = await Promise.race([ref.get(), new Promise((_,r)=>setTimeout(()=>r('timeout'),10000))]);
+    store = {kind:'db', ref};
+    const data = snap && (typeof snap.data === 'function' ? snap.data() : snap);
+    if(data && data.json){ S = normalize(JSON.parse(data.json)); localSave(); render(); setSave(); }
+    else { await save(); }
+  }catch(e){ store = {kind:'local'}; setSave(); }
+}
+
+// ---------- lógica do cronograma ----------
+function cycleSessions(a){ return a.sessions.filter(s => s.c === a.cycle).map(s=>s.d).sort(); }
+
+function plan(id){
+  const a = S.areas[id], t = today();
+  const ses = cycleSessions(a), n = ses.length;
+  const p = {n, phase:'', next:null, ws:null, we:null, status:'', label:'', note:''};
+  if(n === 0){
+    p.phase = 'nao';
+    if(!a.start){ p.status = 'nao'; p.label = 'Sem data de início'; return p; }
+    p.next = a.start; p.ws = a.start; p.we = null;
+    if(t < a.start){ p.status = 'futuro'; p.label = 'Começa '+fmt(a.start); }
+    else if(t === a.start){ p.status = 'hoje'; p.label = 'Primeira sessão hoje'; }
+    else { p.status = 'pendente'; p.label = 'Primeira sessão pendente'; }
+    return p;
+  }
+  const last = ses[n-1];
+  if(n < INITIAL){ p.phase = 'inicial'; p.next = add(last,14); }
+  else if(n < INITIAL+TOUCH){ p.phase = 'manut'; p.next = add(last,28); }
+  else { p.phase = 'livre'; p.next = add(last,28); }
+  p.ws = add(p.next,-TOL);
+  p.we = p.phase === 'livre' ? add(last,56) : add(p.next,TOL);
+  if(t < p.ws){ p.status = 'futuro'; p.label = 'Próxima: '+fmt(p.next); }
+  else if(t <= p.we){
+    p.status = t === p.next ? 'hoje' : 'janela';
+    p.label = t === p.next ? 'É hoje!' : 'Pode fazer até '+fmt(p.we);
+  } else {
+    if(p.phase === 'inicial'){ p.status = 'perdida'; p.label = 'Janela perdida'; p.note = 'Passaram mais de 3 dias da data. A Philips recomenda reiniciar a fase inicial (4 sessões a cada 2 semanas).'; }
+    else { p.status = 'atrasada'; p.label = 'Atrasada desde '+fmt(p.we); p.note = 'Na manutenção você pode seguir o plano (faça assim que puder) ou reiniciar a fase inicial se os pelos voltaram muito.'; }
+  }
+  return p;
+}
+function phaseName(p){
+  if(p.phase === 'nao') return 'Ainda não começou';
+  if(p.phase === 'inicial') return 'Fase inicial · '+p.n+' de '+INITIAL;
+  if(p.phase === 'manut') return 'Manutenção · '+(p.n-INITIAL)+' de '+TOUCH;
+  return 'Manutenção livre (a cada 4–8 semanas)';
+}
+const STLABEL = {hoje:'Hoje', janela:'Na janela', futuro:'Agendada', atrasada:'Atrasada', perdida:'Reiniciar', pendente:'Pendente', nao:'—'};
+
+// projeta datas futuras (para calendário e .ics)
+function projection(id, months){
+  const a = S.areas[id]; if(!a.active) return [];
+  const p = plan(id); if(!p.next) return [];
+  const t = today(), end = add(t, Math.round(months*30.5));
+  let n = p.n, d = p.next;
+  if(p.status === 'perdida'){ n = 0; d = t; }
+  else if(d < t) d = t;
+  const out = [];
+  while(d <= end && out.length < 40){
+    out.push({d, n, optional: n >= INITIAL+TOUCH});
+    n++; d = add(d, n < INITIAL ? 14 : 28);
+  }
+  return out;
+}
+
+// ---------- ações ----------
+function logSession(id, d){
+  const a = S.areas[id];
+  if(cycleSessions(a).includes(d)) return;
+  a.sessions.push({d, c:a.cycle, i:a.intensity || ''});
+  a.sessions.sort((x,y)=>x.d<y.d?-1:1);
+  save(); render();
+  const p = plan(id), ar = AREAS.find(x=>x.id===id);
+  toast(`✓ Registrado! Próxima sessão de ${ar.name.split(' (')[0]}: <b>${fmtL(p.next)}</b>`);
+}
+let toastT;
+function toast(html){
+  let t = document.querySelector('.toast'); if(!t){ t = document.createElement('div'); t.className='toast'; document.body.appendChild(t); }
+  t.innerHTML = html; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>t.hidden = true, 6000);
+}
+// data em que a sessão deve ser feita (para atrasadas/perdidas: hoje)
+function dueDate(p){ const t = today(); if(!p.next) return null; return (p.status==='perdida'||p.status==='atrasada'||p.status==='pendente'||(p.status==='janela'&&p.next<t)) ? t : p.next; }
+function removeSession(id, idx){ S.areas[id].sessions.splice(idx,1); save(); render(); }
+function restart(id){ const a = S.areas[id]; a.cycle++; a.start = today(); save(); render(); }
+
+// ---------- render ----------
+let tab = 'agenda', calM = null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const attLine = id => { const ar = AREAS.find(x=>x.id===id), at = ATT[ar.att]; return `<span class="att"><span class="dot" style="background:${at.color}"></span>${at.name}</span>`; };
+
+function render(){
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tab));
+  ['agenda','areas','cal','info'].forEach(k => $('#v-'+k).hidden = k !== tab);
+  if(tab === 'agenda') renderAgenda();
+  if(tab === 'areas') renderAreas();
+  if(tab === 'cal') renderCal();
+  if(tab === 'info') renderInfo();
+}
+
+function renderAgenda(){
+  const el = $('#v-agenda'), t = today();
+  const act = AREAS.filter(x => S.areas[x.id].active);
+  const notStarted = act.filter(x => !S.areas[x.id].start && cycleSessions(S.areas[x.id]).length === 0);
+  let h = '';
+
+  if(notStarted.length){
+    h += `<div class="card" style="margin-bottom:14px">
+      <h3>Definir quando começar</h3>
+      <p class="small muted" style="margin:4px 0 10px">Escolha a data da 1ª sessão para estas áreas. Dica: começar várias no mesmo dia faz as datas coincidirem e você resolve tudo de uma vez.</p>
+      <div class="row" style="margin-bottom:10px">${notStarted.map(x=>`<label class="row small" style="gap:4px"><input type="checkbox" class="ns" value="${x.id}" checked> ${esc(x.name)}</label>`).join('')}</div>
+      <div class="row"><input type="date" id="nsDate" value="${t}"><button class="btn pri" id="nsGo">Definir início</button></div>
+      <p class="small muted" style="margin:10px 0 0">⚠️ Antes da primeira sessão em cada área, faça o teste de pele e espere 24 h.</p>
+    </div>`;
+  }
+
+  // agrupa próximas ações por data
+  const groups = {};
+  act.forEach(x => {
+    const p = plan(x.id); if(!p.next) return;
+    let key = p.next;
+    if(p.status === 'perdida' || p.status === 'atrasada' || p.status === 'pendente') key = 'late';
+    else if(p.status === 'janela' && p.next < t) key = t;
+    (groups[key] = groups[key] || []).push({x, p});
+  });
+  const keys = Object.keys(groups).sort((a,b)=> a==='late'?-1 : b==='late'?1 : a<b?-1:1);
+  if(keys.length){
+    const k0 = keys[0], g = groups[k0], names = g.map(i=>i.x.name.split(' (')[0]).join(', ');
+    let when, late = false;
+    if(k0==='late'){ when = 'Hoje, '+fmtL(t); late = true; }
+    else if(k0===t) when = 'Hoje, '+fmtL(k0);
+    else { const n = diff(k0,t); when = fmtL(k0); when += n===1 ? ' (amanhã)' : ` (em ${n} dias)`; }
+    h += `<div class="hero ${late?'late':''}"><div class="k">${late?'Você tem sessão atrasada':'Sua próxima sessão'}</div>
+      <div class="d">${when}</div><div class="a">${esc(names)}${late?' — veja os detalhes abaixo':''}</div></div>`;
+  }
+
+  if(!keys.length && !notStarted.length){
+    h += `<div class="card empty">Nenhuma área ativa. Ative as áreas na aba <b>Áreas</b>.</div>`;
+  } else if(keys.length){
+    h += `<div class="card">`;
+    keys.slice(0,8).forEach(k => {
+      let box;
+      if(k === 'late'){
+        const lost = groups[k].some(g=>g.p.status==='perdida');
+        box = `<div class="datebox ${lost?'lost':'late'}"><b>!</b><span>atenção</span></div>`;
+      } else {
+        const d = parse(k), cls = k===t ? '' : (k<t?'':'fut');
+        box = `<div class="datebox ${cls}"><b>${d.getDate()}</b><span>${MES[d.getMonth()]}</span></div>`;
+      }
+      const title = k==='late' ? 'Atrasadas / pendentes' : (k===t ? 'Hoje · '+fmt(k) : fmt(k) + ' · em '+diff(k,t)+' dia'+(diff(k,t)===1?'':'s'));
+      h += `<div class="agenda-day">${box}<div style="flex:1">
+        <div style="font-weight:600;margin-bottom:2px">${title}</div>
+        ${groups[k].map(({x,p}) => `<div class="item">
+          <div><div>${esc(x.name)} <span class="tag s-${p.status}">${STLABEL[p.status]}</span></div>
+          <div class="row small muted">${attLine(x.id)} · ${phaseName(p)}${p.ws && p.status==='futuro' ? ' · janela '+fmt(p.ws)+' – '+fmt(p.we) : ''}</div>
+          ${p.note ? `<div class="alert ${p.status==='atrasada'?'w':''}">${p.note}</div>` : ''}</div>
+          <div class="row">
+            ${p.status==='perdida' ? `<button class="btn sm" data-restart="${x.id}">Reiniciar fase inicial</button>` : ''}
+            ${(p.status!=='futuro') ? `<button class="btn pri sm" data-done="${x.id}">✓ Fiz hoje</button>` : ''}
+            <button class="btn sm ghost" data-other="${x.id}">outra data…</button>
+          </div></div>`).join('')}
+      </div></div>`;
+    });
+    h += `</div>`;
+  }
+  el.innerHTML = h;
+
+  const go = $('#nsGo');
+  if(go) go.onclick = () => {
+    const d = $('#nsDate').value; if(!d) return;
+    document.querySelectorAll('.ns:checked').forEach(c => S.areas[c.value].start = d);
+    save(); render();
+  };
+}
+
+function progBar(a, p){
+  let h = '<div class="prog">';
+  for(let i=0;i<INITIAL+TOUCH;i++){
+    if(i===INITIAL) h += '<i class="gap"></i>';
+    h += `<i class="${i < p.n ? 'done' : (i<INITIAL?'ini':'')}"></i>`;
+  }
+  return h + '</div>';
+}
+
+function renderAreas(){
+  const el = $('#v-areas');
+  let h = `<p class="muted small">Ligue só as áreas que você vai tratar. Cada área tem o seu próprio cronograma — elas não precisam estar sincronizadas.</p>`;
+  Object.keys(ATT).forEach(k => {
+    const list = AREAS.filter(x => x.att === k);
+    h += `<h2><span class="dot" style="background:${ATT[k].color};width:12px;height:12px"></span> ${ATT[k].name}</h2><div class="grid">`;
+    list.forEach(x => {
+      const a = S.areas[x.id], p = plan(x.id);
+      h += `<div class="card ${a.active?'':'off'}">
+        <div class="between"><h3>${esc(x.name)}</h3>
+          <label class="switch" title="Ativar área"><input type="checkbox" data-toggle="${x.id}" ${a.active?'checked':''}><span></span></label></div>
+        ${a.active ? `
+        <div class="small muted" style="margin-top:2px">${phaseName(p)}</div>
+        ${progBar(a,p)}
+        ${p.next ? `<div class="nextline"><div class="small muted">${p.n===0?'Primeira sessão':'Próxima sessão'}</div><b>${fmtL(dueDate(p))}${dueDate(p)===today()?' (hoje)':''}</b>
+          ${p.ws && p.status!=='perdida' && p.status!=='atrasada' ? `<div class="small muted">Pode fazer entre ${fmt(p.ws)} e ${fmt(p.we)}</div>` : ''}</div>` : ''}
+        <div class="row small" style="margin-top:8px"><span class="tag s-${p.status}">${STLABEL[p.status]}</span> <span>${p.label}</span></div>
+        ${p.note ? `<div class="alert ${p.status==='atrasada'?'w':''}">${p.note}</div>` : ''}
+        <div class="row" style="margin-top:12px">
+          <button class="btn pri sm" data-done="${x.id}">✓ Fiz hoje</button>
+          <button class="btn sm" data-other="${x.id}">Registrar outra data</button>
+          ${p.n>0 || p.status==='perdida' ? `<button class="btn sm ghost" data-restart="${x.id}" data-confirm="1">Reiniciar</button>` : ''}
+        </div>
+        <div class="row small" style="margin-top:10px">
+          ${p.n===0 ? `<label class="row" style="gap:6px">Início <input type="date" data-start="${x.id}" value="${a.start||''}"></label>` : ''}
+          <label class="row" style="gap:6px">Intensidade
+            <select data-int="${x.id}"><option value="">—</option>${[1,2,3,4,5].map(i=>`<option ${String(a.intensity)===String(i)?'selected':''}>${i}</option>`).join('')}</select></label>
+        </div>
+        ${a.sessions.length ? `<ul class="hist">${a.sessions.map((s,i)=>({s,i})).reverse().map(({s,i})=>`<li><span>${fmtY(s.d)}${s.i?' · int. '+s.i:''}${s.c!==a.cycle?' · ciclo anterior':''}</span><button class="btn sm ghost" data-del="${x.id}:${i}" title="Apagar">✕</button></li>`).join('')}</ul>` : ''}
+        ` : `<div class="small muted" style="margin-top:6px">Desligada</div>`}
+      </div>`;
+    });
+    h += `</div>`;
+  });
+  el.innerHTML = h;
+}
+
+function renderCal(){
+  const el = $('#v-cal'), t = today();
+  if(!calM){ const d = new Date(); calM = {y:d.getFullYear(), m:d.getMonth()}; }
+  const {y,m} = calM;
+  const first = new Date(y,m,1), start = new Date(first); start.setDate(1 - first.getDay());
+  // eventos
+  const ev = {};
+  AREAS.forEach(x => {
+    const a = S.areas[x.id];
+    a.sessions.forEach(s => (ev[s.d] = ev[s.d]||[]).push({x, done:true}));
+    projection(x.id, 14).forEach(p => (ev[p.d] = ev[p.d]||[]).push({x, done:false, optional:p.optional}));
+  });
+  let h = `<div class="between" style="margin:6px 0 10px;align-items:center">
+    <button class="btn" id="calPrev">‹</button>
+    <h2 style="margin:0">${MESL[m]} ${y}</h2>
+    <button class="btn" id="calNext">›</button></div>
+    <div class="legend">${Object.keys(ATT).map(k=>`<span class="row" style="gap:5px"><span class="dot" style="background:${ATT[k].color}"></span>${ATT[k].name.replace('Acessório ','')}</span>`).join('')}
+    <span>● feito</span><span>○ planejado</span></div>
+    <div class="cal">${DOW.map(d=>`<div class="h">${d}</div>`).join('')}`;
+  for(let i=0;i<42;i++){
+    const d = new Date(start); d.setDate(start.getDate()+i);
+    const s = iso(d), list = ev[s] || [];
+    h += `<div class="c ${d.getMonth()!==m?'out':''} ${s===t?'today':''}"><div class="n">${d.getDate()}</div>
+      ${list.map(e=>`<div class="chip ${e.done?'done':'proj'}" style="color:${ATT[e.x.att].color}" title="${esc(e.x.name)}${e.optional?' (manutenção conforme necessidade)':''}"><span class="dot" style="background:${ATT[e.x.att].color}"></span>${esc(e.x.name.split(' (')[0])}</div>`).join('')}
+    </div>`;
+    if(i===34 && d.getMonth()!==m) break;
+  }
+  h += `</div><p class="small muted">As datas planejadas assumem que você faz cada sessão no dia previsto. Se fizer um ou dois dias antes ou depois, tudo se ajusta sozinho a partir da data que você registrar.</p>
+  <div class="card" style="margin-top:14px"><h3>Levar para o calendário do celular</h3>
+  <p class="small muted" style="margin:4px 0 10px">Gera um arquivo .ics com as próximas sessões (12 meses) e lembrete na véspera, às 20h. Abra-o no celular para importar no Google Agenda ou no Calendário do iPhone. Se você registrar sessões fora da data, gere de novo.</p>
+  <button class="btn pri" id="icsBtn">Baixar calendário (.ics)</button></div>`;
+  el.innerHTML = h;
+  $('#calPrev').onclick = () => { calM.m--; if(calM.m<0){calM.m=11;calM.y--;} renderCal(); };
+  $('#calNext').onclick = () => { calM.m++; if(calM.m>11){calM.m=0;calM.y++;} renderCal(); };
+  $('#icsBtn').onclick = exportIcs;
+}
+
+function renderInfo(){
+  $('#v-info').innerHTML = `
+  <div class="card">
+    <h3>O cronograma recomendado pela Philips</h3>
+    <div class="tip"><b>Fase inicial — 4 sessões, uma a cada 2 semanas (14 dias).</b><br><span class="small muted">Faça dentro de 3 dias antes ou depois da data prevista. Se passar disso, a recomendação é recomeçar a fase inicial.</span></div>
+    <div class="tip"><b>Manutenção — 1 sessão a cada 4 semanas, 8 vezes.</b><br><span class="small muted">Se perder uma, você pode seguir o plano normalmente ou, se os pelos voltaram muito, reiniciar a fase inicial.</span></div>
+    <div class="tip"><b>Depois disso — retoques quando os pelos voltarem</b> (mais ou menos a cada 4 a 8 semanas).</div>
+    <p class="small muted">Fazer mais vezes do que isso não acelera nem melhora o resultado. É normal os pelos levarem de 1 a 2 semanas para cair depois da primeira sessão.</p>
+  </div>
+
+  <h2>Qual acessório em cada área</h2>
+  <div class="grid">
+    <div class="card"><div class="row"><span class="dot" style="background:var(--corpo)"></span><b>Corpo</b></div><p class="small muted" style="margin:6px 0 0">Janela grande e curva para dentro. Pernas, coxas, braços e barriga — áreas abaixo do pescoço.</p></div>
+    <div class="card"><div class="row"><span class="dot" style="background:var(--rosto)"></span><b>Rosto</b></div><p class="small muted" style="margin:6px 0 0">Janela pequena e plana, com filtro UV. Buço, queixo e mandíbula (abaixo das maçãs do rosto). Nunca nas sobrancelhas, cílios ou perto dos olhos.</p></div>
+    <div class="card"><div class="row"><span class="dot" style="background:var(--axilas)"></span><b>Axilas</b></div><p class="small muted" style="margin:6px 0 0">Curva para fora, para encaixar na axila. Sem desodorante na hora.</p></div>
+    <div class="card"><div class="row"><span class="dot" style="background:var(--biquini)"></span><b>Biquíni</b></div><p class="small muted" style="margin:6px 0 0">Curva para fora, para a virilha. Só na parte externa — não use nos lábios vaginais nem no ânus.</p></div>
+  </div>
+
+  <h2>Antes de cada sessão</h2>
+  <div class="card small">
+    <div class="tip">Raspe a área (de preferência no dia anterior ou no mesmo dia). Durante o tratamento, não use cera nem depilador que arranca o pelo pela raiz — a luz precisa da raiz.</div>
+    <div class="tip">Pele limpa, seca e sem cremes, óleos ou desodorante.</div>
+    <div class="tip">Na primeira vez em cada área: teste de pele e espere 24 h para ver se houve reação.</div>
+    <div class="tip">Evite sol forte e bronzeamento antes e depois das sessões; pele bronzeada aumenta o risco de irritação.</div>
+    <div class="tip">Deixe o sensor SmartSkin sugerir a intensidade e use a mais alta que for confortável. Anote aqui na aba <b>Áreas</b> para lembrar da próxima vez.</div>
+    <p class="muted" style="margin:10px 0 0">Para tudo o que é contraindicação (remédios fotossensibilizantes, tatuagens, pintas, gravidez etc.), o manual do aparelho é a referência final.</p>
+  </div>
+
+  <h2>Seus dados</h2>
+  <div class="card small">
+    <p style="margin:0 0 10px" class="muted">Faça uma cópia de segurança do seu histórico ou apague tudo para começar do zero.</p>
+    <div class="row"><button class="btn" id="bkCopy">Copiar backup</button><button class="btn" id="bkRestore">Restaurar backup</button><button class="btn ghost" id="bkReset">Apagar tudo</button></div>
+  </div>`;
+  $('#bkCopy').onclick = () => showText('Backup', JSON.stringify(S), 'Guarde este texto em algum lugar (notas, e-mail).');
+  $('#bkRestore').onclick = () => {
+    modal(`<h3>Restaurar backup</h3><p class="small muted">Cole o texto do backup:</p><textarea id="rsT"></textarea>
+      <div class="row" style="margin-top:10px;justify-content:flex-end"><button class="btn" data-close>Cancelar</button><button class="btn pri" id="rsGo">Restaurar</button></div>`);
+    $('#rsGo').onclick = () => { try{ S = normalize(JSON.parse($('#rsT').value)); save(); closeModal(); render(); }catch(e){ $('#rsT').style.borderColor='var(--bad)'; } };
+  };
+  $('#bkReset').onclick = () => confirmBox('Apagar todo o histórico e as datas? Não dá para desfazer.', () => { S = blank(); save(); render(); });
+}
+
+// ---------- modais ----------
+function modal(html){ $('#modalBody').innerHTML = html; $('#modal').classList.add('show'); }
+function closeModal(){ $('#modal').classList.remove('show'); }
+function confirmBox(msg, ok){
+  modal(`<p style="margin-top:0">${msg}</p><div class="row" style="justify-content:flex-end"><button class="btn" data-close>Cancelar</button><button class="btn pri" id="cfOk">Confirmar</button></div>`);
+  $('#cfOk').onclick = () => { closeModal(); ok(); };
+}
+function showText(title, text, hint){
+  modal(`<h3>${title}</h3><p class="small muted">${hint}</p><textarea readonly id="txT"></textarea>
+    <div class="row" style="margin-top:10px;justify-content:flex-end"><button class="btn" data-close>Fechar</button><button class="btn pri" id="txCp">Copiar</button></div>`);
+  $('#txT').value = text;
+  $('#txCp').onclick = async () => { try{ await navigator.clipboard.writeText(text); $('#txCp').textContent='Copiado ✓'; }catch(e){ $('#txT').select(); $('#txCp').textContent='Selecione e copie'; } };
+}
+function otherDate(id){
+  const ar = AREAS.find(x=>x.id===id);
+  modal(`<h3>Registrar sessão</h3><p class="small muted">${esc(ar.name)} — em que dia você fez?</p>
+    <input type="date" id="odD" value="${today()}" max="${today()}">
+    <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-close>Cancelar</button><button class="btn pri" id="odGo">Registrar</button></div>`);
+  $('#odGo').onclick = () => { const d = $('#odD').value; if(d){ closeModal(); logSession(id, d); } };
+}
+
+// ---------- .ics ----------
+function icsText(){
+  const t = today(), stamp = new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const byDate = {};
+  AREAS.forEach(x => projection(x.id, 12).forEach(p => (byDate[p.d] = byDate[p.d]||[]).push({x, p})));
+  let out = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Cronograma Lumea//PT-BR','CALSCALE:GREGORIAN','X-WR-CALNAME:Depilação Lumea'];
+  Object.keys(byDate).sort().forEach(d => {
+    const items = byDate[d];
+    const names = items.map(i=>i.x.name.split(' (')[0]).join(', ');
+    const desc = items.map(i=>`${i.x.name} — ${ATT[i.x.att].name}`).join('\\n') + '\\nJanela: 3 dias antes ou depois.';
+    const ds = d.replace(/-/g,''), de = add(d,1).replace(/-/g,'');
+    out.push('BEGIN:VEVENT','UID:lumea-'+ds+'@cronograma','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+ds,'DTEND;VALUE=DATE:'+de,
+      'SUMMARY:Lumea: '+names,'DESCRIPTION:'+desc,
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Amanhã: depilação Lumea ('+names+'). Raspe hoje!','TRIGGER:-PT4H','END:VALARM','END:VEVENT');
+  });
+  out.push('END:VCALENDAR');
+  return out.join('\r\n');
+}
+async function exportIcs(){
+  const txt = icsText();
+  try{
+    const dl = await claude.use('downloads');
+    if(dl){
+      try{ await dl.save({filename:'cronograma-lumea.ics', data:txt}); return; }
+      catch(e){ if(e && (e.code==='declined' || e.name==='AbortError')) return; }
+    }
+  }catch(e){}
+  showText('Calendário (.ics)', txt, 'Não consegui baixar o arquivo direto. Copie este texto, salve num arquivo chamado cronograma-lumea.ics e abra no celular.');
+}
+
+// ---------- eventos ----------
+document.addEventListener('click', e => {
+  const b = e.target.closest('button, [data-close]');
+  if(e.target.id === 'modal'){ closeModal(); return; }
+  if(!b) return;
+  if(b.hasAttribute('data-close')){ closeModal(); return; }
+  if(b.dataset.t){ tab = b.dataset.t; render(); window.scrollTo(0,0); return; }
+  if(b.dataset.done){ logSession(b.dataset.done, today()); return; }
+  if(b.dataset.other){ otherDate(b.dataset.other); return; }
+  if(b.dataset.restart){
+    const id = b.dataset.restart;
+    if(b.dataset.confirm) confirmBox('Reiniciar a fase inicial desta área? O histórico fica guardado, e a contagem volta para a sessão 1 começando hoje.', () => restart(id));
+    else restart(id);
+    return;
+  }
+  if(b.dataset.del){
+    const [id, i] = b.dataset.del.split(':');
+    confirmBox('Apagar esta sessão do histórico?', () => removeSession(id, +i));
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if(t.dataset.toggle){ S.areas[t.dataset.toggle].active = t.checked; save(); render(); }
+  if(t.dataset.start !== undefined && t.dataset.start){ S.areas[t.dataset.start].start = t.value || null; save(); render(); }
+  if(t.dataset.int){ S.areas[t.dataset.int].intensity = t.value; save(); }
+});
+
+initStore();
+</script>
+</body>
+</html>
